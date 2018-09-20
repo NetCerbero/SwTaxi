@@ -1,58 +1,43 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import Maps from './src/component/Maps';
+import Start from './src/screen/Start';
+import firebaseConfig from './src/utils/firebase';
+import * as firebase from 'firebase';//importa todo
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import Nave from "./src/navigation/navegacionConductor";
 
-type Props = {};
+firebase.initializeApp(firebaseConfig);
+
 export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-      </View>
-    );
-  }
-}
+	constructor(){
+		super();
+		this.state={
+			isLogged:false
+		}
+	}
+	async componentDidMount(){
+		await firebase.auth().onAuthStateChanged((user)=>{
+			if(user !== null){
+				this.setState({
+					isLogged: true
+				});
+			}else{
+				this.setState({
+					isLogged: false
+				});
+			}
+		}); 
+		//firebase.auth().signOut();
+	}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+	render() {
+		const {isLogged} = this.state;
+		if(isLogged){
+			return(<Nave/>);
+		}
+		return (
+		  <Start/>
+		);
+	}
+}
