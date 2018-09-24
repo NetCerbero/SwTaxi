@@ -209,6 +209,7 @@ export default class DetalleViaje extends Component {
 		}
 		return null;
 	}
+	
 	render() {
 		return (
 		  <View style={{flex:1}}>

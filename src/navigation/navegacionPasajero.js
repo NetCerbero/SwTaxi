@@ -9,10 +9,37 @@ import ViajeRealizadoScreen from '../screen/pasajero/ViajeRealizado';
 
 const TaxisScreenStack = createStackNavigator({
 	ListaTaxis:{
-		screen: ListaTaxiScreen
+		screen: ListaTaxiScreen,
+		navigationOptions:{
+	        title:'Lista de taxis',
+	        headerStyle:{
+	          backgroundColor:'rgba(23,32,51,0.85)' 
+	        },
+	        headerTitleStyle:{
+		      textAlign:'center',
+		      alignSelf:'center',
+		      fontSize:20,
+		      color:'#fff',
+		      fontWeight:'bold'
+		    }
+	    }
 	},
 	VistaViaje:{
-		screen: VistaViajeScreen
+		screen: VistaViajeScreen,
+		navigationOptions:{
+	        title:'Vista del recorrido',
+	        headerStyle:{
+	        	height:40,
+	          	backgroundColor:'rgba(23,32,51,0.85)' 
+	        },
+	        headerTitleStyle:{
+		      textAlign:'center',
+		      alignSelf:'center',
+		      fontSize:20,
+		      color:'#fff',
+		      fontWeight:'bold'
+		    }
+	    }
 	}
 });
 
