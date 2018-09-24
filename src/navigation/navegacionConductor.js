@@ -1,17 +1,112 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome'; // 6.2.2
-import { createBottomTabNavigator } from 'react-navigation'; // 1.0.0-beta.27
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'; // 1.0.0-beta.27
 
 //los componentes
 import HomeScreen from '../screen/Home';
 import PublicacionScreen from '../screen/Publicacion';
 import ViajesScreen from '../screen/Viajes';
+import DetalleViajeScreen from '../screen/DetalleViaje';
+import DetallePasajeroScreen from '../screen/DetallePasajero';
+
+import TransporteForm from '../screen/TransporteForm';
 import PruebaScreen from '../component/Prueba';
+
+const navigationOptions = {
+  navigationOptions:{
+    headerStyle:{
+      backgroundColor:'rgba(200, 38, 74, 1)' 
+    },
+    headerTitleStyle:{
+      textAlign:'center',
+      alignSelf:'center',
+      fontSize:20,
+      color:'#fff',
+      fontWeight:'bold'
+    }
+  }
+};
+
+
+const leftIcon = (navigation, icon) => <Icon name={icon}
+                      style={{marginLeft:20}}
+                      size={30}
+                      color='white'
+                      //onPress={() => navigation.navigate()}
+                    />;
+
+const rightIcon = (navigation, icon) => <Icon name={icon}
+                      style={{marginRight:20}}
+                      size={30}
+                      color='white'
+                      //onPress={() => navigation.navigate('ListRestaurants')}
+                    />;
+
+const HomeScreenStack = createStackNavigator(
+  {
+    HomeTransporte: {
+      screen: HomeScreen,
+      navigationOptions:{
+        title:'SwUber Programados'
+      }
+    },
+    DetalleViaje:{
+      screen: DetalleViajeScreen,
+      navigationOptions:{
+        title:'Detalle Viaje',
+        headerStyle:{
+          height:40,
+          backgroundColor:'rgba(23,32,51,0.85)' 
+        },
+      }
+    },
+    ListaPasajeros:{
+      screen: DetallePasajeroScreen,
+      navigationOptions:{
+        title:'Pasajeros',
+        headerStyle:{
+          backgroundColor:'rgba(200, 38, 74, 1)' 
+        },
+      }
+    }
+  },
+  navigationOptions
+);
+
+
+const TransporteScreenStack = createStackNavigator(
+  {
+    MapaTransporte: {
+      screen: PruebaScreen,
+      navigationOptions :{
+         header:null
+      }
+    },
+    FormTransporte:{
+      screen:TransporteForm,
+      navigationOptions:{
+        title:'Formulario de viajes',
+        headerStyle:{
+          backgroundColor:'rgba(200, 38, 74, 1)' 
+        },
+        headerTitleStyle:{
+          textAlign:'center',
+          alignSelf:'center',
+          fontSize:20,
+          color:'#fff',
+          fontWeight:'bold'
+        }
+      }
+    }
+  }
+);
+
+
 
 
 export default createBottomTabNavigator({
   Home:{
-    screen: HomeScreen,
+    screen: HomeScreenStack,
     navigationOptions:{
       title: "Home",
       tabBarIcon:({tintColor}) => (
@@ -20,7 +115,7 @@ export default createBottomTabNavigator({
     }
   },
   Transporte:{
-    screen: PruebaScreen,
+    screen: TransporteScreenStack,
     navigationOptions:{
       title: "Programar",
       tabBarIcon:({tintColor}) => (
@@ -38,7 +133,7 @@ export default createBottomTabNavigator({
     }
   }
 },{
-  initialRouteName: 'Transporte',
+  initialRouteName: 'Home',
   order:['Home','Transporte','Viaje'],
   tabBarOptions:{
     activeTintColor: '#F8F8F8', // active icon color

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import MapView, { Marker} from 'react-native-maps';
+import MapView, { Marker, Callout} from 'react-native-maps';
 import {StyleSheet, View} from 'react-native';
 import {Dimensions} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import MapViewDirections from 'react-native-maps-directions';
-
-
+import {Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {NavigationActions} from 'react-navigation';
 const {width, height} = Dimensions.get('window');
 const GOOGLE_MAPS_APIKEY = 'AIzaSyBtfZupkTUaGoBT11dC8EBv3yfAMtZmSeQ';
 const style = StyleSheet.create({
@@ -19,6 +20,28 @@ const style = StyleSheet.create({
 	},
 	map:{
 		...StyleSheet.absoluteFillObject
+	},
+	button:{
+		backgroundColor: 'rgba(111,38,74,0.6)',
+		height: 40,
+		position:'absolute',
+		borderWidth:0,
+		borderRadius: 5,
+		marginTop: 5,
+		marginRight:(width/2 - (width/5)/2 ),
+	    marginLeft:(width/2 -  (width/5)/2 ),
+		width: width/5
+	},
+	buttonClear:{
+		backgroundColor: 'rgba(111,38,74,0.6)',
+		height: 40,
+		position:'absolute',
+		borderWidth:0,
+		borderRadius: 5,
+		marginTop: 5,
+		//marginRight:(width/2 - (width/5)/2 ),
+	    marginLeft:(width/2 -  (width/5)/2 - width/5 ),
+		width: width/5
 	}
 });
 
@@ -34,9 +57,9 @@ export default class Prueba extends Component{
 
 	addMarker(coordinate){
 		let now = (new Date).getTime();
-		if(this.state.ladAddedMarker > now - 5000){
-			return;
-		}
+		// if(this.state.ladAddedMarker > now - 5000){
+		// 	return;
+		// }
 
 		this.setState({
 			markers: [
@@ -61,6 +84,15 @@ export default class Prueba extends Component{
 		this.setState({markers:markers});
 	}
 
+	continuarFormulario(){
+		// const navigateAction = NavigationActions.navigate({
+ 	// 		routeName: 'FormTransporte'
+ 	// 	});
+ 	// 	this.props.navigation.dispatch(navigateAction); 
+ 		// this.continuarFormulario.bind(this)
+ 		this.props.navigation.navigate('FormTransporte',{puntos:this.state.markers});
+	}
+
 	renderRuta(item, index){
 		if((this.state.markers.length >= 2) && (index < this.state.markers.length - 1) ){
 			return(
@@ -83,6 +115,8 @@ export default class Prueba extends Component{
 				<MapView style={style.map}
 					showsUserLocation={true}
 					followsUserLocation={true}
+					//showsUserLocation={true}
+     				showsMyLocationButton={true}
 					initialRegion={{
 						latitude:-17.867658,
 						longitude: -63.197338,
@@ -103,7 +137,37 @@ export default class Prueba extends Component{
 						/>
 					))}
 					{this.state.markers.map(this.renderRuta.bind(this))}
-				</MapView>	
+				</MapView>
+				<Button
+					onPress={this.continuarFormulario.bind(this)}
+					buttonStyle={style.button}
+					title={""}
+					text={"Luis"}
+					icon={
+						<Icon
+							name={'taxi'}
+							size={25}
+							color={'white'}
+						/>
+					}
+				>
+				</Button>	
+				
+				<Button
+					onPress={()=>(this.setState({markers:[]}))}
+					buttonStyle={style.buttonClear}
+					title={""}
+					text={"Luis"}
+					icon={
+						<Icon
+							name={'trash'}
+							size={25}
+							color={'white'}
+						/>
+					}
+				>
+				</Button>	
+
 			</View>
 		);
 	}
