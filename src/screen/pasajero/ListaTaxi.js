@@ -31,7 +31,9 @@ export default class ListaTaxi extends Component{
 								pasajerosSubidos: e.val().pasajerosSubidos,
 								puntosRecorridos:e.val().puntosRecorridos,
 								estado:e.val().estado,
-								idConductor: e.val().id
+								idConductor: e.val().id,
+								inicio: e.val().inicio,
+								fin: e.val().fin
 							});
 						}
 					}
