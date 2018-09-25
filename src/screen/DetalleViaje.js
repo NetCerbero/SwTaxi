@@ -87,9 +87,25 @@ export default class DetalleViaje extends Component {
 		firebase.database().ref().child('transporte').child(this.state.idPk)
 			.on('value', snap=>{
 				let row = snap.val();
+				//verificar el error
 				this.setState({cantidadPasajero: row.pasajerosSubidos});
+				let pasajeros = [];
 				if(row.pasajerosSubidos){
-					//this.setState({detallePasajero: row.detallePasajero});
+					// for(e in row.detallePasajero){
+					// 	pasajeros.push({
+					// 		idPk: e
+					// 		fin: row.detallePasajero[e].fin,
+					// 		idUser: row.detallePasajero[e].idUser,
+					// 		inicio: row.detallePasajero[e].inicio,
+					// 		pago: row.detallePasajero[e].pago,
+					// 		precio: row.detallePasajero[e].precio,
+					// 		ubicacion:{
+					// 			latitude: row.detallePasajero[e].ubicacion.latitude,
+					// 			longitude: row.detallePasajero[e].ubicacion.longitude
+					// 		}
+					// 	});
+					// }
+					//this.setState({detallePasajero: pasajeros});
 					this.setState({
 						detallePasajero: [
 							{	
@@ -151,6 +167,19 @@ export default class DetalleViaje extends Component {
 		//         />
 		//     );
 		// }
+		return null;
+	}
+
+	renderPasajeros(item){
+		if(this.state.detallePasajero.length){
+			return(
+				<Marker 
+					coordinate={item.ubicacion}
+					title="Pasajero"
+					//image={<Icon name={'taxi'} size={10} color={'blue'}/>}
+					image={require('../../assets/icons/personaG1.png')}
+				/>);
+		}
 		return null;
 	}
 
@@ -233,7 +262,7 @@ export default class DetalleViaje extends Component {
 									key={marker.key}
 									pinColor={'green'}
 									title="Inicio"
-									//image={require('../../assets/icons/car-marker.png')}
+									image={require('../../assets/icons/startG.png')}
 								/>
 							);
 						}
@@ -244,7 +273,7 @@ export default class DetalleViaje extends Component {
 									key={marker.key}
 									pinColor={'green'}
 									title="Fin"
-									//image={require('../../assets/icons/car-marker.png')}
+									image={require('../../assets/icons/finishG.png')}
 								/>
 							);	
 						}
@@ -253,12 +282,13 @@ export default class DetalleViaje extends Component {
 								coordinate={marker.coordinate}
 								key={marker.key}
 								pinColor={'green'}
-								//image={require('../../assets/icons/car-marker.png')}
+								image={require('../../assets/icons/marketG.png')}
 							/>
 						);
 					}
 				)}
 				{this.state.markers.map(this.renderRuta.bind(this))}
+				{this.state.detallePasajero.map(this.renderPasajeros.bind(this))}
 				<Polyline coordinates={this.state.recorrido} strokeWidth={4} strokeColor={'red'} />
 			</MapView>
 			{this.renderButton()}

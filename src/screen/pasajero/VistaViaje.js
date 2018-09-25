@@ -61,31 +61,50 @@ export default class DetalleViaje extends Component {
 			finPasajero: false,
 			reservado:false,
 			idDetalleViaje:0,
+			cantidadPasajero:params.detalle.pasajerosSubidos,
 			detallePasajero:[],
 			recorrido:[]
 		};
 	}
 
 	iniciarViaje(){
-		// firebase.database().ref().child(`transporte/${this.state.idPk}`).update({inicio:true})
-		// 	.then(() => {
-		// 		Toast.showWithGravity('Iniciando el recorrido de ruta', Toast.LONG, Toast.BOTTOM);
-		// 		this.setState({inicio:true});
-		// 	})
-		// 	.catch(e => Toast.showWithGravity(e.message, Toast.LONG, Toast.BOTTOM));
+		if(this.state.idDetalleViaje){
+			firebase.database().ref().child('transporte').child(this.state.idPk).child('detallePasajero').child(this.state.idDetalleViaje).update({inicio:true})
+			.then(() => {
+				Toast.showWithGravity('Enviando coordenadas al Conductor', Toast.LONG, Toast.BOTTOM);
+				this.setState({inicioPasajero:true});
+			})
+			.catch(e => Toast.showWithGravity(e.message, Toast.LONG, Toast.BOTTOM));
+		}
 	}
 
 	finalizarViaje(){
-		// firebase.database().ref().child(`transporte/${this.state.idPk}`).update({fin:true,estado:0})
-		// 	.then(() => {
-		// 		Toast.showWithGravity('Recorrido de ruta finalizada', Toast.LONG, Toast.BOTTOM);
-		// 		this.setState({fin:true});
-		// 	})
-		// 	.catch(e => Toast.showWithGravity(e.message, Toast.LONG, Toast.BOTTOM));
+		firebase.database().ref().child('transporte').child(this.state.idPk).child('detallePasajero').child(this.state.idDetalleViaje).update({fin:true})
+			.then(() => {
+				Toast.showWithGravity('Finalizando el envio de coordenadas', Toast.LONG, Toast.BOTTOM);
+				this.setState({finPasajero:true});
+			})
+			.catch(e => Toast.showWithGravity(e.message, Toast.LONG, Toast.BOTTOM));
 	}
 
 	ReservarAsiento(){
+		firebase.database().ref().child('transporte').child(this.state.idPk).child('detallePasajero').push().update(
+				{
+					ubicacion:{latitude:0,longitude:0},
+					pago:false,
+					precio:5,
+					idUser:firebase.auth().currentUser.uid,
+					inicio:false,
+					fin:false
+				}
+			);
 
+		firebase.database().ref().child('transporte').child(this.state.idPk)
+			.update(
+				{
+					pasajerosSubidos : this.state.cantidadPasajero + 1
+				}
+			);
 	}
 
 	componentDidMount(){
@@ -95,30 +114,14 @@ export default class DetalleViaje extends Component {
 				let row = snap.val();
 				if(row.inicio && !row.fin){
 					this.setState({
-						recorrido:row.recorrido
-						// detallePasajero: [
-						// 	{	
-						// 		idPk: '-LNBAPgvwXq73gXjFPu0',
-						// 		fin: false,
-						// 		idUser: 452,
-						// 		inicio: false,
-						// 		pago: false,
-						// 		precio: 2.5,
-						// 		ubicacion:{latitude: -17.862741327023286, longitude: -63.20177766399195}
-						// 	},{
-						// 		idPk: '-LNBASChHZ_-kRoK_arF',
-						// 		fin: false,
-						// 		idUser: 123,
-						// 		inicio: false,
-						// 		pago: false,
-						// 		precio: 2.5,
-						// 		ubicacion:{latitude: -17.860422164950617, longitude: -63.1978159739692}
-						// 	}
-						// ]
+						recorrido:row.recorrido,
+						cantidadPasajero: row.pasajerosSubidos
 					});
 				}
 				if(row.pasajerosSubidos){
+					let i = 0;
 					for(e in row.detallePasajero){
+						i++;
 						if(row.detallePasajero[e].idUser == firebase.auth().currentUser.uid){
 							this.setState({
 								reservado:true, 
@@ -129,6 +132,7 @@ export default class DetalleViaje extends Component {
 							//Toast.showWithGravity("pasajero encontrado", Toast.LONG, Toast.BOTTOM);
 						}
 					};
+					this.setState({cantidadPasajero: i});
 				}
 			});
 
@@ -140,11 +144,11 @@ export default class DetalleViaje extends Component {
 						longitude: position.coords.longitude
 					};
 				if(this.state.inicioPasajero && !this.state.finPasajero){
-					// firebase.database().ref().child(`transporte/${this.state.idPk}`).update({recorrido:[...this.state.recorrido,{latitude:ubicacion.latitude,longitude:ubicacion.longitude}]})
-					// .then(() => {
-					// 	this.setState({ ubicacion,recorrido:[...this.state.recorrido,{latitude:ubicacion.latitude,longitude:ubicacion.longitude}] });
-					// })
-					// .catch(e => Toast.showWithGravity(e.message, Toast.LONG, Toast.BOTTOM));
+					firebase.database().ref().child(`transporte/${this.state.idPk}/detallePasajero/${this.state.idDetalleViaje}`).update({ubicacion:{latitude:ubicacion.latitude,longitude:ubicacion.longitude}})
+					.then(() => {
+						
+					})
+					.catch(e => Toast.showWithGravity(e.message, Toast.LONG, Toast.BOTTOM));
 				}
 			},
 			(error) =>Toast.showWithGravity(error.message, Toast.LONG, Toast.BOTTOM) ,

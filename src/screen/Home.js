@@ -63,36 +63,36 @@ export default class Home extends Component {
 		this.refTransporte = firebase.database().ref().child('transporte');
 	}
 
-	// componentDidMount(){
-	// 	this.refTransporte
-	// 			.orderByChild('id')
-	// 			.equalTo(firebase.auth().currentUser.uid)
-	// 			.on('value', snap =>{
-	// 				let viajes = [];
-	// 				snap.forEach( item => {
-	// 					if(item.val().estado){
-	// 						viajes.push({
-	// 							idPk:item.key,
-	// 							titulo:item.val().titulo,
-	// 							hora: item.val().hora,
-	// 							fecha: item.val().fecha,
-	// 							pasajeros: item.val().pasajeros,
-	// 							pasajerosSubidos: item.val().pasajerosSubidos,
-	// 							precio: item.val().precio,
-	// 							inicio: item.val().inicio,
-	// 							fin: item.val().fin,
-	// 							estado: item.val().estado,
-	//							coordinate: item.val().coordinate,
-	// 							puntosRecorridos: item.val().puntosRecorridos
-	// 						})
-	// 					}
-	// 				});
-	// 				this.setState({
-	// 					viajes,
-	// 					loaded:true
-	// 				})
-	// 			});
-	// }
+	componentDidMount(){
+		// this.refTransporte
+		// 		.orderByChild('id')
+		// 		.equalTo(firebase.auth().currentUser.uid)
+		// 		.on('value', snap =>{
+		// 			let viajes = [];
+		// 			snap.forEach( item => {
+		// 				if(item.val().estado){
+		// 					viajes.push({
+		// 						idPk:item.key,
+		// 						titulo:item.val().titulo,
+		// 						hora: item.val().hora,
+		// 						fecha: item.val().fecha,
+		// 						pasajeros: item.val().pasajeros,
+		// 						pasajerosSubidos: item.val().pasajerosSubidos,
+		// 						precio: item.val().precio,
+		// 						inicio: item.val().inicio,
+		// 						fin: item.val().fin,
+		// 						estado: item.val().estado,
+		// 						coordinate: item.val().coordinate,
+		// 						puntosRecorridos: item.val().puntosRecorridos
+		// 					})
+		// 				}
+		// 			});
+		// 			this.setState({
+		// 				viajes,
+		// 				loaded:true
+		// 			})
+		// 		});
+	}
 
 
 	transporteDetalle(transporte){
