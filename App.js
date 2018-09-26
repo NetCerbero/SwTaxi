@@ -25,10 +25,9 @@ export default class App extends Component<Props> {
 				firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('rol')
 					.on('value', snap =>{
 						this.setState({isLogged: true, pasajero: snap.val().pasajero,conductor:snap.val().conductor});
-						// pasajero = snap.val().pasajero;
-						// conductor = snap.val().conductor;
-						//Toast.showWithGravity( snap.val().luis, Toast.LONG, Toast.BOTTOM);
 					});
+			}else{
+				this.setState({isLogged:false, conductor:false, pasajero:false});
 			}
 		}); 
 		//firebase.auth().signOut();

@@ -1,5 +1,6 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // 6.2.2
+import MaterialC from 'react-native-vector-icons/MaterialCommunityIcons'; // 6.2.2
+import Icon from 'react-native-vector-icons/FontAwesome'; // 6.2.2
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'; // 1.0.0-beta.27
 import * as firebase from 'firebase';
 //los componentes
@@ -8,7 +9,7 @@ import PublicacionScreen from '../screen/Publicacion';
 import ViajesScreen from '../screen/Viajes';
 import DetalleViajeScreen from '../screen/DetalleViaje';
 import DetallePasajeroScreen from '../screen/DetallePasajero';
-
+import LogOutScreen from '../screen/logout';
 import TransporteForm from '../screen/TransporteForm';
 import PruebaScreen from '../component/Prueba';
 
@@ -35,21 +36,21 @@ const leftIcon = (navigation, icon) => <Icon name={icon}
                       //onPress={() => navigation.navigate()}
                     />;
 
-const rightIcon = () => <Icon name={'logout'}
+const rightIcon = (navigation) => <MaterialC name={'logout'}
                       style={{marginRight:20}}
                       size={30}
                       color='white'
-                      onPress={() => firebase.auth().signOut() }
+                      onPress={() => navigation.navigate('logout') }
                     />;
 
 const HomeScreenStack = createStackNavigator(
   {
     HomeTransporte: {
       screen: HomeScreen,
-      navigationOptions:{
+      navigationOptions:({navigation})=>({
         title:'SwUber Programados',
-        headerRight: rightIcon()
-      }
+        headerRight: rightIcon(navigation)
+      })
     },
     DetalleViaje:{
       screen: DetalleViajeScreen,
@@ -69,7 +70,8 @@ const HomeScreenStack = createStackNavigator(
           backgroundColor:'rgba(200, 38, 74, 1)' 
         },
       }
-    }
+    },
+    logout:{screen:LogOutScreen}
   },
   navigationOptions
 );
