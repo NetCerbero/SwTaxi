@@ -1,17 +1,26 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome5'; // 6.2.2
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // 6.2.2
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'; // 1.0.0-beta.27
-
+import * as firebase from 'firebase';
 
 import ListaTaxiScreen from '../screen/pasajero/ListaTaxi';
 import VistaViajeScreen from '../screen/pasajero/VistaViaje';
 import ViajeRealizadoScreen from '../screen/pasajero/ViajeRealizado';
+
+const rightIcon = () => <Icon name={'logout'}
+                      style={{marginRight:20}}
+                      size={30}
+                      color='white'
+                      onPress={() => firebase.auth().signOut() }
+                    />;
+
 
 const TaxisScreenStack = createStackNavigator({
 	ListaTaxis:{
 		screen: ListaTaxiScreen,
 		navigationOptions:{
 	        title:'Lista de taxis',
+	        headerRight: rightIcon(),
 	        headerStyle:{
 	          backgroundColor:'rgba(23,32,51,0.85)' 
 	        },

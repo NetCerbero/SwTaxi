@@ -1,7 +1,7 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome'; // 6.2.2
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // 6.2.2
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'; // 1.0.0-beta.27
-
+import * as firebase from 'firebase';
 //los componentes
 import HomeScreen from '../screen/Home';
 import PublicacionScreen from '../screen/Publicacion';
@@ -35,11 +35,11 @@ const leftIcon = (navigation, icon) => <Icon name={icon}
                       //onPress={() => navigation.navigate()}
                     />;
 
-const rightIcon = (navigation, icon) => <Icon name={icon}
+const rightIcon = () => <Icon name={'logout'}
                       style={{marginRight:20}}
                       size={30}
                       color='white'
-                      //onPress={() => navigation.navigate('ListRestaurants')}
+                      onPress={() => firebase.auth().signOut() }
                     />;
 
 const HomeScreenStack = createStackNavigator(
@@ -47,7 +47,8 @@ const HomeScreenStack = createStackNavigator(
     HomeTransporte: {
       screen: HomeScreen,
       navigationOptions:{
-        title:'SwUber Programados'
+        title:'SwUber Programados',
+        headerRight: rightIcon()
       }
     },
     DetalleViaje:{

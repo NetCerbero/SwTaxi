@@ -61,7 +61,10 @@ export default class DetalleViaje extends Component {
 			finPasajero: false,
 			reservado:false,
 			idDetalleViaje:0,
+			pasajeros:params.detalle.pasajeros,
 			cantidadPasajero:params.detalle.pasajerosSubidos,
+			pagoPasajero: false,
+			precioViaje: params.detalle.precio,
 			detallePasajero:[],
 			recorrido:[]
 		};
@@ -88,7 +91,8 @@ export default class DetalleViaje extends Component {
 	}
 
 	ReservarAsiento(){
-		firebase.database().ref().child('transporte').child(this.state.idPk).child('detallePasajero').push().update(
+		if(this.state.cantidadPasajero != this.state.pasajeros){
+			firebase.database().ref().child('transporte').child(this.state.idPk).child('detallePasajero').push().update(
 				{
 					ubicacion:{latitude:0,longitude:0},
 					pago:false,
@@ -99,12 +103,15 @@ export default class DetalleViaje extends Component {
 				}
 			);
 
-		firebase.database().ref().child('transporte').child(this.state.idPk)
-			.update(
-				{
-					pasajerosSubidos : this.state.cantidadPasajero + 1
-				}
-			);
+			firebase.database().ref().child('transporte').child(this.state.idPk)
+				.update(
+					{
+						pasajerosSubidos : this.state.cantidadPasajero + 1
+					}
+				);
+		}else{
+			Toast.showWithGravity("Transporte lleno", Toast.LONG, Toast.BOTTOM)
+		}
 	}
 
 	componentDidMount(){
@@ -112,10 +119,11 @@ export default class DetalleViaje extends Component {
 		firebase.database().ref().child('transporte').child(this.state.idPk)
 			.on('value', snap=>{
 				let row = snap.val();
-				if(row.inicio && !row.fin){
+				if(row.inicio && !row.fin && row.recorrido){
 					this.setState({
 						recorrido:row.recorrido,
-						cantidadPasajero: row.pasajerosSubidos
+						cantidadPasajero: row.pasajerosSubidos,
+						pasajeros:row.pasajeros
 					});
 				}
 				if(row.pasajerosSubidos){
@@ -127,6 +135,8 @@ export default class DetalleViaje extends Component {
 								reservado:true, 
 								inicioPasajero:row.detallePasajero[e].inicio,
 								finPasajero:row.detallePasajero[e].fin,
+								pagoPasajero:row.detallePasajero[e].pago,
+								precioViaje:row.detallePasajero[e].precio,
 								idDetalleViaje:e
 							});
 							//Toast.showWithGravity("pasajero encontrado", Toast.LONG, Toast.BOTTOM);
@@ -161,18 +171,18 @@ export default class DetalleViaje extends Component {
 	}
 
 	renderRuta(item, index){
-		// if((this.state.markers.length >= 2) && (index < this.state.markers.length - 1) ){
-		// 	return(
-		// 		<MapViewDirections
-		// 			key={index}
-		//             origin={this.state.markers[index].coordinate}
-		//             destination={this.state.markers[index + 1].coordinate}
-		//             apikey={GOOGLE_MAPS_APIKEY}
-		//             strokeWidth={3}
-		//             strokeColor="hotpink"
-		//         />
-		//     );
-		// }
+		if((this.state.markers.length >= 2) && (index < this.state.markers.length - 1) ){
+			return(
+				<MapViewDirections
+					key={index}
+		            origin={this.state.markers[index].coordinate}
+		            destination={this.state.markers[index + 1].coordinate}
+		            apikey={GOOGLE_MAPS_APIKEY}
+		            strokeWidth={3}
+		            strokeColor="hotpink"
+		        />
+		    );
+		}
 		return null;
 	}
 
@@ -234,30 +244,13 @@ export default class DetalleViaje extends Component {
 		this.props.navigation.navigate('ListaPasajeros',{idPk:this.state.idPk});
 	}
 
-	renderButtonPasajeros(){
-		// if(this.state.cantidadPasajero){
-		// 	return(<Button 
-		// 		onPress={()=>this.ListaPasajero()}
-		// 		title={this.state.cantidadPasajero.toString()} text={"Lista"}
-		// 		buttonStyle={style.button}
-		// 		icon={
-		// 			<IconFont
-		// 				name={'th-list'}
-		// 				size={25}
-		// 				color={'white'}
-		// 			/>
-		// 		}></Button>);
-		// }
-		return null;
-	}
-
 	renderTaxi(){
-		if(this.state.recorrido.length){
+		if(this.state.recorrido.length>0){
 			return(<Marker 
 				coordinate={this.state.recorrido[this.state.recorrido.length-1]}
 				title="Taxi"
 				//image={<Icon name={'taxi'} size={10} color={'blue'}/>}
-				image={require('../../../assets/icons/car-marker.png')}
+				image={require('../../../assets/icons/carG.png')}
 			/>);
 		}
 		return null;
@@ -286,7 +279,7 @@ export default class DetalleViaje extends Component {
 									key={marker.key}
 									pinColor={'green'}
 									title="Inicio"
-									//image={require('../../assets/icons/car-marker.png')}
+									image={require('../../../assets/icons/startG.png')}
 								/>
 							);
 						}
@@ -297,7 +290,7 @@ export default class DetalleViaje extends Component {
 									key={marker.key}
 									pinColor={'green'}
 									title="Fin"
-									//image={require('../../assets/icons/car-marker.png')}
+									image={require('../../../assets/icons/finalG.png')}
 								/>
 							);	
 						}
@@ -312,7 +305,7 @@ export default class DetalleViaje extends Component {
 					}
 				)}
 				{this.state.markers.map(this.renderRuta.bind(this))}
-				<Polyline coordinates={this.state.recorrido} strokeWidth={4} strokeColor={'red'} />
+				<Polyline coordinates={this.state.recorrido} strokeWidth={4} strokeColor={'blue'} />
 				{this.renderTaxi()}
 			</MapView>
 			{this.renderBotonReserva()}

@@ -91,42 +91,42 @@ export default class DetalleViaje extends Component {
 				this.setState({cantidadPasajero: row.pasajerosSubidos});
 				let pasajeros = [];
 				if(row.pasajerosSubidos){
-					// for(e in row.detallePasajero){
-					// 	pasajeros.push({
-					// 		idPk: e
-					// 		fin: row.detallePasajero[e].fin,
-					// 		idUser: row.detallePasajero[e].idUser,
-					// 		inicio: row.detallePasajero[e].inicio,
-					// 		pago: row.detallePasajero[e].pago,
-					// 		precio: row.detallePasajero[e].precio,
-					// 		ubicacion:{
-					// 			latitude: row.detallePasajero[e].ubicacion.latitude,
-					// 			longitude: row.detallePasajero[e].ubicacion.longitude
-					// 		}
-					// 	});
-					// }
-					//this.setState({detallePasajero: pasajeros});
-					this.setState({
-						detallePasajero: [
-							{	
-								idPk: '-LNBAPgvwXq73gXjFPu0',
-								fin: false,
-								idUser: 452,
-								inicio: false,
-								pago: false,
-								precio: 2.5,
-								ubicacion:{latitude: -17.862741327023286, longitude: -63.20177766399195}
-							},{
-								idPk: '-LNBASChHZ_-kRoK_arF',
-								fin: false,
-								idUser: 123,
-								inicio: false,
-								pago: false,
-								precio: 2.5,
-								ubicacion:{latitude: -17.860422164950617, longitude: -63.1978159739692}
+					for(e in row.detallePasajero){
+						pasajeros.push({
+							idPk: e,
+							fin: row.detallePasajero[e].fin,
+							idUser: row.detallePasajero[e].idUser,
+							inicio: row.detallePasajero[e].inicio,
+							pago: row.detallePasajero[e].pago,
+							precio: row.detallePasajero[e].precio,
+							ubicacion:{
+								latitude: row.detallePasajero[e].ubicacion.latitude,
+								longitude: row.detallePasajero[e].ubicacion.longitude
 							}
-						]
-					});
+						});
+					}
+					this.setState({detallePasajero: pasajeros});
+					// this.setState({
+					// 	detallePasajero: [
+					// 		{	
+					// 			idPk: '-LNBAPgvwXq73gXjFPu0',
+					// 			fin: false,
+					// 			idUser: 452,
+					// 			inicio: false,
+					// 			pago: false,
+					// 			precio: 2.5,
+					// 			ubicacion:{latitude: -17.862741327023286, longitude: -63.20177766399195}
+					// 		},{
+					// 			idPk: '-LNBASChHZ_-kRoK_arF',
+					// 			fin: false,
+					// 			idUser: 123,
+					// 			inicio: false,
+					// 			pago: false,
+					// 			precio: 2.5,
+					// 			ubicacion:{latitude: -17.860422164950617, longitude: -63.1978159739692}
+					// 		}
+					// 	]
+					// });
 				}
 			});
 
@@ -155,18 +155,18 @@ export default class DetalleViaje extends Component {
 	}
 
 	renderRuta(item, index){
-		// if((this.state.markers.length >= 2) && (index < this.state.markers.length - 1) ){
-		// 	return(
-		// 		<MapViewDirections
-		// 			key={index}
-		//             origin={this.state.markers[index].coordinate}
-		//             destination={this.state.markers[index + 1].coordinate}
-		//             apikey={GOOGLE_MAPS_APIKEY}
-		//             strokeWidth={3}
-		//             strokeColor="hotpink"
-		//         />
-		//     );
-		// }
+		if((this.state.markers.length >= 2) && (index < this.state.markers.length - 1) ){
+			return(
+				<MapViewDirections
+					key={index}
+		            origin={this.state.markers[index].coordinate}
+		            destination={this.state.markers[index + 1].coordinate}
+		            apikey={GOOGLE_MAPS_APIKEY}
+		            strokeWidth={3}
+		            strokeColor="hotpink"
+		        />
+		    );
+		}
 		return null;
 	}
 
