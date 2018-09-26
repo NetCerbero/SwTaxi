@@ -136,7 +136,7 @@ export default createBottomTabNavigator({
     }
   }
 },{
-  initialRouteName: 'Home',
+  initialRouteName: 'Viaje',
   order:['Home','Transporte','Viaje'],
   tabBarOptions:{
     activeTintColor: '#F8F8F8', // active icon color
