@@ -4,41 +4,38 @@ import {
 } from 'react-native';
 import { CameraKitCameraScreen } from 'react-native-camera-kit';
 import Toast from 'react-native-simple-toast';
-import messaging from 'firebase/messaging';
-import storage from 'firebase/storage';
+//import messaging from 'firebase/messaging';
+//import storage from 'firebase/storage';
+import * as firebase from 'firebase';
+import {RNFetchBlob} from 'react-native-fetch-blob';
+
 const {width, height} = Dimensions.get('window');
 
 export default class CameraScreen extends Component {
   constructor(){
     super();
     this.state = {
-      image_uri : null
+      image_uri : null,
     }
   }
 
   onBottomButtonPressed(event) {
-    // const captureImages = JSON.stringify(event.captureImages);
+    // const datos = JSON.stringify(event);
     // Alert.alert(
-    //   `${event.type} button pressed`,
-    //   `${captureImages}`,
+    //   `${event} button pressed`,
+    //   `${datos}`,
     //   [
     //     { text: 'OK', onPress: () => console.log('OK Pressed') },
     //   ],
     //   { cancelable: false }
     // );
-    this.setState({image_uri:event.captureImages[event.captureImages.length-1].uri});
-    Toast.showWithGravity(this.state.image_uri, Toast.LONG, Toast.BOTTOM)
+    this.setState({image_uri:event.image.uri});
+    Toast.showWithGravity(this.state.image_uri, Toast.LONG, Toast.BOTTOM);
   }
 
   render() {
     return (
       <CameraKitCameraScreen
-        style={{
-            flex: 1,
-            backgroundColor: 'white',
-            width:width,
-            height:height
-        }}
         actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
         onBottomButtonPressed={(event) => this.onBottomButtonPressed(event)}
         flashImages={{

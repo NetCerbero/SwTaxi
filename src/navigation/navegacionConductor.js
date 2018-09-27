@@ -7,6 +7,7 @@ import * as firebase from 'firebase';
 import HomeScreen from '../screen/Home';
 import PublicacionScreen from '../screen/Publicacion';
 import ViajesScreen from '../screen/Viajes';
+import CamaraPrueba from '../screen/camaraPrueba';
 import DetalleViajeScreen from '../screen/DetalleViaje';
 import DetallePasajeroScreen from '../screen/DetallePasajero';
 import LogOutScreen from '../screen/logout';
