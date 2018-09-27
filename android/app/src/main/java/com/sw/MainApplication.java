@@ -3,6 +3,7 @@ package com.sw;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -11,8 +12,7 @@ import com.airbnb.android.react.maps.MapsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.wix.RNCameraKit.RNCameraKitPackage;
 
-import com.imagepicker.ImagePickerPackage; // <-- add this import 
-import com.RNFetchBlob.RNFetchBlobPackage;   
+//import com.imagepicker.ImagePickerPackage; // <-- add this import  
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,11 +29,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RNFetchBlobPackage(),
           new MapsPackage(),
           new VectorIconsPackage(),
-          new RNCameraKitPackage(),
-          new ImagePickerPackage(),//agregado
-          new RNFetchBlobPackage() 
+          new RNCameraKitPackage()
+          //new ImagePickerPackage()//agregado
       );
     }
 
