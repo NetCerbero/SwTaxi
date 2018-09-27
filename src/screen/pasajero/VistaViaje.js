@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialC from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconFont from 'react-native-vector-icons/FontAwesome';
 import IconOcticons from 'react-native-vector-icons/Octicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Toast from 'react-native-simple-toast';
 //import {NavigationActions} from 'react-navigation';
 const {width, height} = Dimensions.get('window');
@@ -25,12 +26,23 @@ const style = StyleSheet.create({
 	map:{
 		...StyleSheet.absoluteFillObject
 	},
+	buttonPagar:{
+		height: 40,
+		borderWidth:0,
+		borderRadius: 5,
+		marginTop: 5,
+		position:'absolute',
+		marginRight:10,
+	    marginLeft:width - (width/4 + 23),
+		width: width/4+13
+	},
 	button:{
 		//backgroundColor: 'rgba(33,149,242,0.6)',
 		height: 40,
 		borderWidth:0,
 		borderRadius: 5,
 		marginTop: 5,
+		position:'absolute',
 		//marginRight:,
 	    marginLeft:5,
 		width: width/4+13
@@ -244,6 +256,35 @@ export default class DetalleViaje extends Component {
 		this.props.navigation.navigate('ListaPasajeros',{idPk:this.state.idPk});
 	}
 
+	PagarViaje(){
+		firebase.database().ref().child('transporte').child(this.state.idPk).child('detallePasajero').child(this.state.idDetalleViaje).update({pago:true})
+			.then(() => {
+				Toast.showWithGravity('Pagando el pasaje', Toast.LONG, Toast.BOTTOM);
+				this.setState({pagoPasajero:true});
+			})
+			.catch(e => Toast.showWithGravity(e.message, Toast.LONG, Toast.BOTTOM));
+	}
+	renderButtonCobrar(){
+		if(!this.state.pagoPasajero && this.state.reservado && !this.state.finPasajero){
+			return(
+				<Button
+					onPress={()=>this.PagarViaje()}
+					title={"Pagar"}
+					text={"iniciar"}
+					buttonStyle={style.buttonPagar}
+					icon={
+						<MaterialIcons
+							name={'attach-money'}
+							size={25}
+							color={'white'}
+						/>
+					}
+
+				></Button>
+			);
+		}
+		return null;
+	}
 	renderTaxi(){
 		if(this.state.recorrido.length>0){
 			return(<Marker 
@@ -310,6 +351,7 @@ export default class DetalleViaje extends Component {
 			</MapView>
 			{this.renderBotonReserva()}
 			{this.renderButton()}
+			{this.renderButtonCobrar()}
 		  </View>
 		);
 	}

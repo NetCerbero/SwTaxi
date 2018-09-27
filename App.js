@@ -9,7 +9,7 @@ import Conductor from "./src/navigation/navegacionConductor";
 import Pasajero from "./src/navigation/navegacionPasajero";
 
 firebase.initializeApp(firebaseConfig);
-
+console.disableYellowBox = true;
 export default class App extends Component<Props> {
 	constructor(){
 		super();

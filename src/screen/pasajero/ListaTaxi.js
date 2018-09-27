@@ -56,6 +56,7 @@ export default class ListaTaxi extends Component{
 				key={index}
 				title={item.titulo}
   				image={datos.fotoTaxi}
+  				//image={{uri:'https://firebasestorage.googleapis.com/v0/b/reactnativefirebase-9f813.appspot.com/o/image%2F1538065222697.jpg?alt=media&token=fd8a59a0-d04e-4dab-8322-fc66d2be408e'}}
   			>
   				<Text style={{marginBottom: 5}}>
 			    	{`Conductor: ${datos.nombre}`}
